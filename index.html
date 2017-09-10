@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Timeline basic demo</title>
+    <script src="vis.js"></script>
+    <link href="vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css"/>
+    <link href="app.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!--sortable library container-->
+<div class="container" style="height: 200px;">
+    <div data-force="30" class="layer block" style="left: 14.5%; top: 50px; width: 37%;border:1px solid black;">
+        <div class="layer title">List K</div>
+        <ul id="foo" class="block__list block__list_tags">
+            <li>K 1</li>
+            <li>K 2</li>
+            <li>K 3</li>
+        </ul>
+    </div>
+    <div data-force="18" class="layer block" style="left: 58%; top: 50px; width: 40%;border:1px solid black;">
+        <div class="layer title">List B</div>
+        <ul id="bar" class="block__list block__list_tags">
+            <li>B 1</li>
+            <li>B 2</li>
+            <li>B 3</li>
+        </ul>
+    </div>
+</div>
+<!--timline (vis) library container-->
+<div id="visualization" style="margin-top: 40px"></div>
+
+
+<!--own trial container-->
+<style>li {
+    border: solid red 1px;
+}</style>
+<div>
+    <br/><br/>
+    <ul id="k_itms" style="width: 20%;margin-left: 30%">
+        <li>Kandarp 1</li>
+        <br/>
+        <li>Kandarp 2</li>
+        <br/>
+        <li>Kandarp 3</li>
+        <br/>
+    </ul>
+</div>
+
+<script src="Sortable.js"></script>
+<script src="app.js"></script>
+
+<script type="text/javascript">
+    /* timline script*/
+
+    // create a dataset with items
+    // we specify the type of the fields `start` and `end` here to be strings
+    // containing an ISO date. The fields will be outputted as ISO dates
+    // automatically getting data from the DataSet via items.get().
+    var items = new vis.DataSet({
+        type: {start: 'ISODate', end: 'ISODate'}
+    });
+    // add items to the DataSet
+    items.add([
+        {id: 1, content: 'item 1<br>start', start: '2014-01-23'},
+        {id: 2, content: 'item 2', start: '2014-01-18'},
+        {id: 3, content: 'item 3', start: '2014-01-21'},
+        {id: 4, content: 'item 4', start: '2014-01-19', end: '2014-01-24'},
+        {id: 5, content: 'item 5', start: '2014-01-28', type: 'point'},
+        {id: 6, content: 'item 6', start: '2014-01-26'}
+    ]);
+
+    var container = document.getElementById('visualization');
+    var options = {
+        start: '2014-01-10',
+        end: '2014-02-10',
+        editable: true,
+        showCurrentTime: true
+    };
+
+    var timeline = new vis.Timeline(container, items, options);
+
+
+    /* self code for interaction */
+
+    var its = document.getElementById('k_itms').getElementsByTagName('li');
+    for (var i = 0; i < its.length; i++) {
+        var ok = its[i].innerText;
+        its[i].setAttribute('draggable', true);
+        its[i].addEventListener('dragstart', function (event) {
+            var item = {
+                content: this.innerText
+            };
+            event.dataTransfer.setData('text', JSON.stringify(item));
+        });
+    }
+
+</script>
+
+
+</body>
+</html>
